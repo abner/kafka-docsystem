@@ -16,14 +16,14 @@ pluginManagement {
 
 rootProject.name = "recepcao"
 include(
-    "docproc-recepcao-domain",
-    "docproc-recepcao-infra",
-    "docproc-recepcao-web"
+    "docsystem-recepcao-domain",
+    "docsystem-recepcao-infra",
+    "docsystem-recepcao-web"
 )
 
-project(":docproc-recepcao-domain").projectDir = file("modulos/domain")
-project(":docproc-recepcao-infra").projectDir = file("modulos/infra")
-project(":docproc-recepcao-web").projectDir = file("modulos/web")
+project(":docsystem-recepcao-domain").projectDir = file("modulos/domain")
+project(":docsystem-recepcao-infra").projectDir = file("modulos/infra")
+project(":docsystem-recepcao-web").projectDir = file("modulos/web")
 
 
 
