@@ -1,0 +1,11 @@
+version: "2"
+
+services:
+  jaeger:
+    extends:
+      file: tracing.docker-compose.yaml
+      service: jaeger-all-in-one
+  postgres:
+    extends:
+      file: postgres.docker-compose.yaml
+      service: postgres

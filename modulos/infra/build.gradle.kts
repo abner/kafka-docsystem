@@ -1,8 +1,7 @@
 
-val quarkusPluginId: String by project
-
-apply(plugin=quarkusPluginId)
-
+plugins {
+    id("io.quarkus")
+}
 
 val quarkusPlatformGroupId: String by project
 val quarkusPlatformArtifactId: String by project
@@ -30,5 +29,5 @@ dependencies {
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.quarkus:quarkus-junit5-mockito")
 
-    api(project(":docproc-recepcao-domain"))
+    api(project(":docsystem-recepcao-domain"))
 }

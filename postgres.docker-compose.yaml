@@ -1,0 +1,13 @@
+version: "2"
+
+services:
+  postgres:
+    image: postgres:13
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: docsystem
+      POSTGRES_PASSWORD: docsystem
+      POSTGRES_DB: docsystem
+    volumes:
+      - ./postgres/init/:/docker-entrypoint-initdb.d/

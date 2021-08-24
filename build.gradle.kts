@@ -1,8 +1,3 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
-
-
-
 plugins {
     jacoco
     kotlin("jvm")
@@ -11,13 +6,14 @@ plugins {
     java
 }
 
-val docprocVersion: String by project
+val docSystemVersion: String by project
 
-group = "io.abner.docproc"
-version = docprocVersion
+group = "io.abner.docsystem"
+version = docSystemVersion
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
 
 }
 
@@ -32,6 +28,8 @@ subprojects {
     repositories {
         mavenCentral()
         mavenLocal()
+        gradlePluginPortal()
+
     }
 
     apply(plugin = "org.jetbrains.kotlin.jvm")
@@ -64,9 +62,11 @@ subprojects {
         implementation(kotlin("stdlib"))
 
         // DEPENDENCIAS DE TESTE
+        testImplementation(kotlin("test"))
+
         // KOTLIN COROUTINES TESTING
-//        testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-debug:$kotlinxCoroutinesVersion")
-//        testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")
+        testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-debug:$kotlinxCoroutinesVersion")
+        testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")
 
         // KOTEST
         //testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
@@ -76,5 +76,73 @@ subprojects {
 
         // MOCKK
         testImplementation("io.mockk:mockk:$mockkVersion")
+    }
+
+    tasks.withType<Test> {
+        useJUnitPlatform {
+            includeEngines("junit-jupiter", "spek2", "kotest")
+        }
+        systemProperty("root.project.dir", project.rootProject.rootDir.absolutePath)
+
+        testLogging {
+            lifecycle {
+                events = mutableSetOf(
+                    org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
+                    org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED,
+                    org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
+                )
+                exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+                showExceptions = true
+                showCauses = true
+                showStackTraces = true
+                showStandardStreams = true
+            }
+            info.events = lifecycle.events
+            info.exceptionFormat = lifecycle.exceptionFormat
+        }
+
+        val failedTests = mutableListOf<TestDescriptor>()
+        val skippedTests = mutableListOf<TestDescriptor>()
+
+        // See https://github.com/gradle/kotlin-dsl/issues/836
+        addTestListener(object : TestListener {
+            override fun beforeSuite(suite: TestDescriptor) {}
+            override fun beforeTest(testDescriptor: TestDescriptor) {}
+            override fun afterTest(testDescriptor: TestDescriptor, result: TestResult) {
+                when (result.resultType) {
+                    TestResult.ResultType.FAILURE -> failedTests.add(testDescriptor)
+                    TestResult.ResultType.SKIPPED -> skippedTests.add(testDescriptor)
+                    else                          -> Unit
+                }
+            }
+
+            override fun afterSuite(suite: TestDescriptor, result: TestResult) {
+                if (suite.parent == null) { // root suite
+                    logger.lifecycle("----")
+                    logger.lifecycle("Test result: ${result.resultType}")
+                    logger.lifecycle(
+                        "Test summary: ${result.testCount} tests, " +
+                                "${result.successfulTestCount} succeeded, " +
+                                "${result.failedTestCount} failed, " +
+                                "${result.skippedTestCount} skipped"
+                    )
+                    failedTests
+                        .takeIf { it.isNotEmpty() }
+                        ?.prefixedSummary("\tFailed Tests")
+                    skippedTests
+                        .takeIf { it.isNotEmpty() }
+                        ?.prefixedSummary("\tSkipped Tests:")
+                }
+            }
+
+            private infix fun List<TestDescriptor>.prefixedSummary(subject: String) {
+                logger.lifecycle(subject)
+                forEach { test -> logger.lifecycle("\t\t${test.displayName()}") }
+            }
+
+            private fun TestDescriptor.displayName() =
+                parent?.let { "${it.name} - $name" } ?: "$name"
+        })
+
     }
 }
