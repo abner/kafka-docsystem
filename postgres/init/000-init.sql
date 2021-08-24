@@ -33,5 +33,6 @@ INSERT INTO documento(idpessoa, ano, descricao, dados) VALUES (
 '000121', 2018, 'Certidao 000121', '{"tipo":"CERTIDAO", "clausula": "valida", "permanencia": "vitalicia"}'
 );
 
-INSERT INTO documento(idpessoa, ano, descricao, dados) VALUES ('000332', 2019, 'Autorização 000332','{"tipo":"AUTORIZACAO", "clausula": "invalida", "permanencia": "temporaria"}');
+INSERT INTO documento(id, idpessoa, ano, descricao, dados)
+VALUES ('','000332', 2019, 'Autorização 000332','{"tipo":"AUTORIZACAO", "clausula": "invalida", "permanencia": "temporaria"}');
 

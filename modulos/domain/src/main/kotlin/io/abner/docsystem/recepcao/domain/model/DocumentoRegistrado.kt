@@ -2,7 +2,7 @@ package io.abner.docsystem.recepcao.domain.model
 
 import java.util.*
 
-data class DocumentoEncontrado(
+data class DocumentoRegistrado(
     override val id: UUID,
     val idPessoa: String = "------",
     val arquivado: Boolean,
@@ -14,9 +14,9 @@ data class DocumentoEncontrado(
         return !this.arquivado
     }
 
-    fun alterar(dados: String): DocumentoEncontrado {
+    fun alterar(dados: String): DocumentoRegistrado {
         return if (podeSerSalvo()) {
-            DocumentoEncontrado(
+            DocumentoRegistrado(
                 id = this.id,
                 dados = dados,
                 descricao = this.descricao,

@@ -3,7 +3,7 @@ package ` io`.abner.docsystem.recepcao.domain.service
 import arrow.core.Either
 import arrow.core.None
 import io.abner.docsystem.recepcao.domain.evento.EventoSubmissaoDocumento
-import io.abner.docsystem.recepcao.domain.model.DocumentoEncontrado
+import io.abner.docsystem.recepcao.domain.model.DocumentoRegistrado
 import io.abner.docsystem.recepcao.domain.model.SubmissaoDocumento
 import io.abner.docsystem.recepcao.domain.port.output.RecuperarDocumentoPort
 import io.abner.docsystem.recepcao.domain.port.output.SalvarDocumentoPort
@@ -21,7 +21,7 @@ class ProcessadorSubmissaoDocumentoServiceTest {
 
     private lateinit var servico: ProcessadorSubmissaoDocumentoService
     private val idDocumento: UUID = UUID.fromString("be3abe68-1f79-49fa-9d9c-dd87ceb3f4af")
-    private val documentoPersistido = DocumentoEncontrado(
+    private val documentoPersistido = DocumentoRegistrado(
         id =idDocumento,
         arquivado = false,
         descricao = "Documento da pessoa 123",
