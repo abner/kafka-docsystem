@@ -28,19 +28,6 @@ class PostgresAdapter : RecuperarDocumentoPort, SalvarDocumentoPort {
     @Inject @field:Default
     lateinit var pgPool: PgPool
 
-    @ConfigProperty(name = "quarkus.profile")
-    lateinit var currentProfile: Optional<String>
-
-    fun inicializar(@Observes startupEvent: StartupEvent) {
-        if (currentProfile.orElse("prod") == "dev") {
-            //val connection = pgPool.connection.await().indefinitely()
-            pgPool.query(PostgresDB.createDatabaseSQL).execute()
-                .flatMap { _ -> pgPool.query(PostgresDB.registrosDocumentosSQL).execute() }
-                .await().indefinitely()
-        }
-    }
-
-
     override suspend fun recuperar(id: UUID): Either<Throwable, Documento> {
         var connection: SqlConnection? = null
 
@@ -94,6 +81,18 @@ class PostgresAdapter : RecuperarDocumentoPort, SalvarDocumentoPort {
             return Either.Left(e)
         } finally {
             connection?.close()
+        }
+    }
+
+    @ConfigProperty(name = "quarkus.profile")
+    lateinit var currentProfile: Optional<String>
+
+    fun inicializar(@Observes startupEvent: StartupEvent) {
+        if (currentProfile.orElse("prod") == "dev") {
+            //val connection = pgPool.connection.await().indefinitely()
+            pgPool.query(PostgresDB.createDatabaseSQL).execute()
+                .flatMap { _ -> pgPool.query(PostgresDB.registrosDocumentosSQL).execute() }
+                .await().indefinitely()
         }
     }
 

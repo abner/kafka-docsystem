@@ -23,13 +23,13 @@ class ProcessadorSubmissaoDocumentoService(
 
         return eitherDocRecuperado.flatMap { documento ->
             // uma vez que foi recuperado sem fallha, checa se ele foi arquivado
-            if (documento.encontrado && (documento as DocumentoRegistrado).arquivado) {
-                return@flatMap Either.Left(Exception("documento.nao-pode-ser-salvo"))
-            } else {
+            if (documento.encontrado && documento.podeSerSalvo()) {
                 val doc = (documento as DocumentoRegistrado)
                     .alterar(evento.getPayload().conteudoDocumento)
 
                 return salvarDocumentoPort.salvar(doc)
+            } else {
+                return@flatMap Either.Left(Exception("documento.nao-pode-ser-salvo"))
             }
         }
     }

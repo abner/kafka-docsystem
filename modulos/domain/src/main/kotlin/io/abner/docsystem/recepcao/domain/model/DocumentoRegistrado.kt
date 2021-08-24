@@ -2,7 +2,7 @@ package io.abner.docsystem.recepcao.domain.model
 
 import java.util.*
 
-data class DocumentoRegistrado(
+class DocumentoRegistrado(
     override val id: UUID,
     val idPessoa: String = "------",
     val arquivado: Boolean,
