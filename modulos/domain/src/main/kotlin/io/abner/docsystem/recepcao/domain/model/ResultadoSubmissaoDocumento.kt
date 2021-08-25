@@ -5,5 +5,5 @@ import java.util.*
 data class ResultadoSubmissaoDocumento(
     val idSolicitacaoAtualizacaoDocumento: UUID,
     val sucesso: Boolean,
-    val detalhe: String
+    val detalhe: String? = null
 )

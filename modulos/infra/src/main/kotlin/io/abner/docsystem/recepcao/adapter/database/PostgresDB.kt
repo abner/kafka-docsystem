@@ -1,4 +1,4 @@
-package io.abner.docsystem.recepcao.adapter
+package io.abner.docsystem.recepcao.adapter.database
 
 object PostgresDB {
     val createDatabaseSQL ="""

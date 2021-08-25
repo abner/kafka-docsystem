@@ -1,5 +1,6 @@
 package io.abner.docsystem.recepcao.adapter
 
+import io.abner.docsystem.recepcao.adapter.database.PostgresAdapter
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.quarkus.test.junit.QuarkusTest
@@ -8,7 +9,6 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
 import java.util.*
 import javax.inject.Inject
-import javax.transaction.Transactional
 
 @QuarkusTest
 class PostgresAdapterTest {

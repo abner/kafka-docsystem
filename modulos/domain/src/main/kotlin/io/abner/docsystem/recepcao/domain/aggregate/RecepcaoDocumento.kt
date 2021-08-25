@@ -1,6 +1,6 @@
 package io.abner.docsystem.recepcao.domain.aggregate
 
-import jakarta.inject.Singleton
+import javax.inject.Singleton
 
 @Singleton
 class RecepcaoDocumento(

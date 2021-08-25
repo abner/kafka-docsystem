@@ -10,7 +10,13 @@ plugins {
     kotlin("plugin.allopen")
 }
 
+val quarkusPlatformGroupId: String by project
+val quarkusPlatformArtifactId: String by project
+val quarkusPlatformVersion: String by project
+
 dependencies {
+    implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
+
     api("io.vavr:vavr:$vavrVersion")
     api("io.arrow-kt:arrow-core:$arrowVersion")
     compileOnly("jakarta.enterprise:jakarta.enterprise.cdi-api:$cdiApiVersion")

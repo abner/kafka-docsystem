@@ -1,0 +1,62 @@
+---
+openapi: 3.0.3
+info:
+  title: API Submissão de Documentos
+  contact:
+    name: Ábner Oliveira
+    url: http://abner.io
+    email: abner.oliveira@serpro.gov.br
+  license:
+    name: MIT
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+tags:
+- name: documento
+  description: Operações em documentos.
+- name: status-submissao
+  description: OPerações relacioandas ao status da submissão
+paths:
+  /api/v1/documento:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentoResource'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/v1/documento/ready/auth:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+components:
+  schemas:
+    DocumentoResource:
+      type: object
+      properties:
+        recepcionarEventoDocumentoUseCase:
+          $ref: '#/components/schemas/RecepcionarEventoDocumentoUseCase'
+    RecepcionarEventoDocumentoUseCase:
+      type: object
+    SubmissaoDocumentoRequestBody:
+      type: object
+      properties:
+        dados:
+          type: object
+          additionalProperties: {}
+        id:
+          $ref: '#/components/schemas/UUID'
+    UUID:
+      format: uuid
+      pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+      type: string

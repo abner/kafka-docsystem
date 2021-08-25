@@ -6,5 +6,5 @@ import io.abner.docsystem.recepcao.domain.model.DocumentoRegistrado
 import java.util.*
 
 interface RecuperarDocumentoPort {
-    suspend fun recuperar(id: UUID): Either<Throwable, DocumentoRegistrado>
+    suspend fun recuperar(id: UUID): Either<Throwable, Documento>
 }

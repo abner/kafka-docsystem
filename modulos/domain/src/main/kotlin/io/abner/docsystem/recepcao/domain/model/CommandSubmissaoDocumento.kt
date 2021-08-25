@@ -2,9 +2,9 @@ package io.abner.docsystem.recepcao.domain.model
 
 import java.util.*
 
-data class SubmissaoDocumento(
+data class CommandSubmissaoDocumento(
     val id: UUID,
     val idDocumento: UUID,
-    val idUsuario: String,
-    val conteudo: String
+    val conteudo: String,
+    val idUsuario: String
 )
