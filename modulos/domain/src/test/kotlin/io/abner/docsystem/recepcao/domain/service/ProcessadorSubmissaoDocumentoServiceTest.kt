@@ -1,4 +1,4 @@
-package ` io`.abner.docsystem.recepcao.domain.service
+package io.abner.docsystem.recepcao.domain.service
 
 import arrow.core.Either
 import arrow.core.None

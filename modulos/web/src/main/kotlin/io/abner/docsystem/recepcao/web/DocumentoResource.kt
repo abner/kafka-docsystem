@@ -103,4 +103,11 @@ class DocumentoResource {
             )
         ).build()
     }
+    /**
+     *  Exemplo REQUEST:
+    {
+    "id": "be3abe68-1f79-49fa-9d9c-dd87ceb3f4af",
+    "dados": {"tipo": "ESCRITURACAO", "orgao": "ORGAO AB"}
+    }
+     */
 }
