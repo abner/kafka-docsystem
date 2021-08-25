@@ -1,5 +1,8 @@
 # Microserviços conectados via eventos com Quarkus e Kafka
 
+## Apresentação
+
+https://docs.google.com/presentation/d/1IK7t_4dnNfrYb062M3E7Ud9piN34qJVTnjDIgUFWCDg/edit?usp=sharing
 
 ## Referências
 
