@@ -27,7 +27,6 @@ class ProcessadorSubmissaoDocumentoService(
         val eitherDocRecuperado = recuperarDocumentoPort.recuperar(
             evento.getPayload().idDocumento
         )
-
         return eitherDocRecuperado.flatMap { documento ->
             // uma vez que foi recuperado sem fallha, checa se ele foi arquivado
             if (documento.encontrado && documento.podeSerSalvo()) {
@@ -39,7 +38,8 @@ class ProcessadorSubmissaoDocumentoService(
                     EventoResultadoSubmissaoDocumento(
                         ResultadoSubmissaoDocumento(
                             idSolicitacaoAtualizacaoDocumento = evento.getPayload().id,
-                            sucesso = true
+                            sucesso = true,
+                            idDocumento = evento.getPayload().idDocumento
                         )
                     )
                 )
@@ -50,6 +50,7 @@ class ProcessadorSubmissaoDocumentoService(
                         ResultadoSubmissaoDocumento(
                             idSolicitacaoAtualizacaoDocumento = evento.getPayload().id,
                             sucesso = false,
+                            idDocumento = evento.getPayload().idDocumento,
                             detalhe = "documento.nao-pode-ser-salvo"
                         )
                     )

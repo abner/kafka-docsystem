@@ -35,7 +35,8 @@ class CanalEventoNotificacaoSubmissaoProcessada : FonteEventoResultadoSubmissaoD
     }
 
     override fun obterStreamResultado(): Multi<EventoResultadoSubmissaoDocumento> {
-        return broadcastEventoNotificaoResultado
+        return broadcastEventoNotificaoResultado.toHotStream()
+
     }
 
     @Incoming("recepcao-notificacao-resultado-submissao")

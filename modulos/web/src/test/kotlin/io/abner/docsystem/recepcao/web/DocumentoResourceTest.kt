@@ -28,21 +28,40 @@ import kotlin.test.assertEquals
 @TestHTTPEndpoint(DocumentoResource::class)
 class DocumentoResourceTest {
 
-    companion object {
-        @BeforeAll
-        @JvmStatic
-        fun setupAll() {
-            RestAssured.enableLoggingOfRequestAndResponseIfValidationFails(LogDetail.ALL)
-        }
-    }
-
-
     @TestHTTPEndpoint(DocumentoResource::class)
     @TestHTTPResource
     lateinit var url: URL
 
     @InjectMock
     lateinit var emissaoCanalEventoSubmissaoDocumento: EmissaoCanalEventoSubmissaoDocumento
+
+
+    @Test
+    @TestSecurity(user = "joao.gerente", roles = ["admin", "user"])
+    fun `deve retornar 204_CREATED ao submeter com usuario logado`() = runBlockingTest {
+        Mockito.`when`(
+            emissaoCanalEventoSubmissaoDocumento.enviar(any())
+        ).thenReturn(Either.Right(None))
+        val idDcoumento = UUID.randomUUID()
+
+        val httpResponse = given()
+            .`when`()
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(SubmissaoDocumentoRequestBody(
+                id = idDcoumento,
+                mapOf("descricao" to "Documento XPTO")
+            ))
+            .post()
+            .then()
+            .statusCode(HttpStatus.SC_CREATED)
+            .extract()
+            .response()
+
+        val body: SubmissaoDocumentoResponseBody = httpResponse.body.`as`<SubmissaoDocumentoResponseBody>(SubmissaoDocumentoResponseBody::class.java) as SubmissaoDocumentoResponseBody
+        val locationHeader = httpResponse.header("Location")
+        assertEquals("/api/v1/submissao-documento/${body.idSubmissao}", locationHeader)
+    }
 
     @Test
     fun `verificar o path`() {
@@ -57,7 +76,7 @@ class DocumentoResourceTest {
             .`when`().get("/ready/auth")
             .then()
             .statusCode(200)
-            .body(`is`("OK - Oi usuário autenticado: joao.gerente"))
+            .body(`is`("OK - Oi usuario autenticado: joao.gerente"))
     }
 
     @Test
@@ -85,31 +104,12 @@ class DocumentoResourceTest {
             .statusCode(401)
     }
 
-    @Test
-    @TestSecurity(user = "joao.gerente", roles = ["admin", "user"])
-    fun `deve retornar 204_CREATED ao submeter com usuario logado`() = runBlockingTest {
-        Mockito.`when`(
-            emissaoCanalEventoSubmissaoDocumento.enviar(any())
-        ).thenReturn(Either.Right(None))
-        val idDcoumento = UUID.randomUUID()
-
-        val httpResponse = given()
-            .`when`()
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(SubmissaoDocumentoRequestBody(
-                id = idDcoumento,
-                mapOf("descricao" to "Documento XPTO")
-            ))
-            .post()
-            .then()
-            .statusCode(HttpStatus.SC_CREATED)
-            .extract()
-            .response()
-
-        val body: SubmissaoDocumentoResponseBody = httpResponse.body.`as`<SubmissaoDocumentoResponseBody>(SubmissaoDocumentoResponseBody::class.java) as SubmissaoDocumentoResponseBody
-        val locationHeader = httpResponse.header("Location")
-        assertEquals("/api/v1/submissao-documento/${body.idSubmissao}", locationHeader)
+    companion object {
+        @BeforeAll
+        @JvmStatic
+        fun setupAll() {
+            RestAssured.enableLoggingOfRequestAndResponseIfValidationFails(LogDetail.ALL)
+        }
     }
 }
 

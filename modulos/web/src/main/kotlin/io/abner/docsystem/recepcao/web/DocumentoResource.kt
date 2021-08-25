@@ -3,6 +3,8 @@ package io.abner.docsystem.recepcao.web
 import io.abner.docsystem.recepcao.domain.port.input.RecepcionarEventoDocumentoUseCase
 import io.quarkus.security.Authenticated
 import org.eclipse.microprofile.openapi.annotations.Operation
+import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn
+import org.eclipse.microprofile.openapi.annotations.enums.ParameterStyle
 import org.eclipse.microprofile.openapi.annotations.media.Content
 import org.eclipse.microprofile.openapi.annotations.media.Schema
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter
@@ -33,7 +35,6 @@ class DocumentoResource {
         val LOGGER: Logger = Logger.getLogger(DocumentoResource::class.java.simpleName)
     }
 
-
     @Inject
     @field:Default
     private lateinit var recepcionarEventoDocumentoUseCase: RecepcionarEventoDocumentoUseCase
@@ -48,7 +49,7 @@ class DocumentoResource {
         scopes = []
     ) ])
     fun readyAuthenticated(@Context ctx: SecurityContext): String {
-        return "OK - Oi usuário autenticado: ${ctx.userPrincipal.name}"
+        return "OK - Oi usuario autenticado: ${ctx.userPrincipal.name}"
     }
 
     @POST
@@ -84,8 +85,8 @@ class DocumentoResource {
         @Parameter(
             description = "corpo da requisição",
             required = true,
-//            `in` = ParameterIn.DEFAULT,
-//            style = ParameterStyle.DEEPOBJECT,
+            `in` = ParameterIn.DEFAULT,
+            style = ParameterStyle.DEEPOBJECT,
             schema = Schema(implementation = SubmissaoDocumentoRequestBody::class)
         ) submissaoDocumento: SubmissaoDocumentoRequestBody,
     ): Response {
