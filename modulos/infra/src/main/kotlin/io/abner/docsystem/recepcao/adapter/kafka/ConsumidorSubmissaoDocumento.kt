@@ -15,7 +15,7 @@ class ConsumidorSubmissaoDocumento() {
         iniciarConsumoEvento()
     }
 
-    fun start(@Observes stopEvent: ShutdownEvent) {
+    fun stop(@Observes stopEvent: ShutdownEvent) {
         subscription.cancel()
     }
 
